@@ -1,14 +1,16 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+import os
+from dotenv import load_dotenv
 import requests
 import datetime
 import time
 
 # --- AYARLAR ---
-SPOTIPY_CLIENT_ID = '0c7890ae46254cf1b3c06070d7f982dd'
-SPOTIPY_CLIENT_SECRET = '0b79d067a0bf43ba9add6eb44a65d0ba'
+CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
+CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 SPOTIPY_REDIRECT_URI = 'http://localhost:8888/callback'
-LASTFM_API_KEY = '955e588c82d7c7e8ddb4959993818969'
+LAST_FM_ID = os.getenv('LASTFM_API_KEY')
 SCOPE = "playlist-modify-public"
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,
