@@ -6,6 +6,8 @@ import requests
 import datetime
 import time
 
+load_dotenv()
+
 # --- AYARLAR ---
 CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
@@ -13,8 +15,8 @@ SPOTIPY_REDIRECT_URI = 'http://localhost:8888/callback'
 LAST_FM_ID = os.getenv('LASTFM_API_KEY')
 SCOPE = "playlist-modify-public"
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=SPOTIPY_CLIENT_ID,
-                                               client_secret=SPOTIPY_CLIENT_SECRET,
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=CLIENT_ID,
+                                               client_secret=CLIENT_SECRET,
                                                redirect_uri=SPOTIPY_REDIRECT_URI,
                                                scope=SCOPE))
 
@@ -27,7 +29,7 @@ def get_recommendations_with_reason(artist, track_name, limit=20):
         'method': 'track.getsimilar',
         'artist': artist,
         'track': track_name,
-        'api_key': LASTFM_API_KEY,
+        'api_key': LAST_FM_ID,
         'format': 'json',
         'limit': limit,
         'autocorrect': 1
@@ -49,7 +51,7 @@ def get_recommendations_with_reason(artist, track_name, limit=20):
         params_artist = {
             'method': 'artist.getsimilar',
             'artist': artist,
-            'api_key': LASTFM_API_KEY,
+            'api_key': LAST_FM_ID,
             'format': 'json',
             'limit': limit,
             'autocorrect': 1
@@ -91,16 +93,6 @@ def find_spotify_details(search_query):
     except:
         pass
     return None, None, None, None
-
-def create_report_file(log_lines, playlist_name):
-    filename = "vibe_raporu.txt"
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(f"RAPOR: {playlist_name}\n")
-        f.write(f"Tarih: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
-        f.write("-" * 50 + "\n")
-        for line in log_lines:
-            f.write(line + "\n")
-    print(f"\n📄 Rapor '{filename}' dosyasına kaydedildi.")
 
 def main():
     print("\n--- 🎵 VibeMaster v4.0 (Çeşitlilik Modu: %100) 🎵 ---")
@@ -188,7 +180,6 @@ def main():
     
     print(f"\n✅ Playlist Hazır: {playlist_name}")
     print(f"Toplam {count} farklı sanatçıdan şarkı eklendi.")
-    create_report_file(log_buffer, playlist_name)
 
 if __name__ == "__main__":
     main()
